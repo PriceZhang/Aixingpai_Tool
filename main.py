@@ -1,70 +1,17 @@
 import time
 
-import cv2
-from paddleocr import PaddleOCR, draw_ocr
+from paddleocr import PaddleOCR
 import pyautogui
-from io import BytesIO
 import numpy as np
-from PIL import Image
 from datetime import datetime
-from difflib import SequenceMatcher
-# 加载paddleOcr模型
-ocr = PaddleOCR(use_angle_cls=True, lang="ch")  # need to run only once to download and load model into memory
 
-width_app = 560  # app的分辨率宽度
-width = 1920
-height = 1080
-left = (width - width_app) // 2
-top = 0
-right = left + width_app
-bottom = height
+from aixing_tools import set_coordinate, InferOcrApp, calculate_text_difference, calculate_center, height, width
 
 shop_list = []
 coordinate_dict = {}
 last_com_time = {}
-def InferOcrApp(x1=left, y1=0, x2=right, y2=bottom):
-    screenshot = pyautogui.screenshot()
-    # width, height = screenshot.size
-    app_image = screenshot.crop((x1, y1, x2, y2))
-    img_path = np.array(app_image)
-    result = ocr.ocr(img_path, cls=True)
-    return result
-def calculate_center(points):
-    # 假设 points 是按照顺时针或逆时针顺序给出的四个点
-    # 例如：points = [[20.0, 551.0], [171.0, 551.0], [171.0, 567.0], [20.0, 567.0]]
-
-    # 计算对角线的交点
-    def line_intersection(p1, q1, p2, q2):
-        A1 = q1[1] - p1[1]
-        B1 = p1[0] - q1[0]
-        C1 = A1 * p1[0] + B1 * p1[1]
-        A2 = q2[1] - p2[1]
-        B2 = p2[0] - q2[0]
-        C2 = A2 * p2[0] + B2 * p2[1]
-
-        determinant = A1 * B2 - A2 * B1
-
-        if determinant == 0:
-            return None  # 线段平行或重合，没有交点
-        else:
-            x = (B2 * C1 - B1 * C2) / determinant
-            y = (A1 * C2 - A2 * C1) / determinant
-            return [x, y]
-
-            # 对角线分组
-
-    diagonal1 = [points[0], points[2]]  # 第一个点和第三个点
-    diagonal2 = [points[1], points[3]]  # 第二个点和第四个点
-
-    # 计算对角线的交点，即四边形的中心点
-    center = line_intersection(*diagonal1, *diagonal2)
-    center[0] = center[0]+left
-    center[1] = center[1]+top
-    return center
-# 计算文本距离
-def calculate_text_difference(text1, text2):
-    matcher = SequenceMatcher(None, text1, text2)
-    return matcher.ratio()
+app_center_x = 0
+app_center_y = height//2
 def BuySellFunction(g_com, g_time, g_point, scroll_time):
     # 0. 进我的委拍，记录数量
     print(coordinate_dict["我的point"])
@@ -254,6 +201,9 @@ if __name__ == "__main__":
             commodity, deadtime = item.split()
             shop_list.append((commodity, deadtime))
             last_com_time[commodity] = 0
+    # 写入当前版本的各关键坐标文件
+    app_center_x = set_coordinate()
+    pyautogui.moveTo(app_center_x, app_center_y)
     # 加载坐标字典
     with open("coordinate_dict.txt", "r", encoding="utf8") as f:
         for item in f.readlines():
@@ -276,9 +226,9 @@ if __name__ == "__main__":
             G_H, G_M, G_S = GotTime.split(".")
             G_time = int(G_H)*60*60 + int(G_M)*60 + int(G_S)
             # if abs(G_time-trans_time) <= 30 and abs(trans_time-last_com_time[Com])>36000:
-            print(G_time)
-            print(trans_time)
-            print(last_com_time[Com])
+            # print(G_time)
+            # print(trans_time)
+            # print(last_com_time[Com])
             Shopping_time(Com, GotTime)
             last_com_time[Com] = trans_time
         time.sleep(10)

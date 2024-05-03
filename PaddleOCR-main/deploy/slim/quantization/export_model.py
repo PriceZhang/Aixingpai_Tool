@@ -30,12 +30,12 @@ from ppocr.modeling.architectures import build_model
 from ppocr.postprocess import build_post_process
 from ppocr.utils.save_load import load_model
 from ppocr.utils.logging import get_logger
-from tools.program import load_config, merge_config, ArgsParser
+from aixing_tools.program import load_config, merge_config, ArgsParser
 from ppocr.metrics import build_metric
-import tools.program as program
+import aixing_tools.program as program
 from paddleslim.dygraph.quant import QAT
 from ppocr.data import build_dataloader, set_signal_handlers
-from tools.export_model import export_single_model
+from aixing_tools.export_model import export_single_model
 
 
 def main():

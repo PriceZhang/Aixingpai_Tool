@@ -146,9 +146,9 @@ if __name__ == "__main__":
             shop_list.append((commodity, deadtime))
             last_com_time[commodity] = 0
     # 写入当前版本的各关键坐标文件
-    # app_center_x = set_coordinate()
+    app_center_x = set_coordinate()
     # print(app_center_x)
-    app_center_x = 1440
+    # app_center_x = 1440
     pyautogui.moveTo(app_center_x, app_center_y)
     # 加载坐标字典
     with open("coordinate_dict.txt", "r", encoding="utf8") as f:
@@ -171,12 +171,12 @@ if __name__ == "__main__":
         for Com, GotTime in shop_list:
             G_H, G_M, G_S = GotTime.split(".")
             G_time = int(G_H)*60*60 + int(G_M)*60 + int(G_S)
-            # if abs(G_time-trans_time) <= 30 and abs(trans_time-last_com_time[Com])>36000:
+            if abs(G_time-trans_time) <= 30 and abs(trans_time-last_com_time[Com])>36000:
             # print(G_time)
             # print(trans_time)
             # print(last_com_time[Com])
-            Shopping_time(Com, G_time)
-            last_com_time[Com] = trans_time
+                Shopping_time(Com, G_time)
+                last_com_time[Com] = trans_time
         time.sleep(10)
 
 

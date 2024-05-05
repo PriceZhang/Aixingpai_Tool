@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from datetime import datetime
 from paddleocr import PaddleOCR
-test_debug = 1
+test_debug = 0
 ocr = PaddleOCR(use_angle_cls=True, lang="ch")  # need to run only once to download and load model into memory
 width = 1920
 height = 1080

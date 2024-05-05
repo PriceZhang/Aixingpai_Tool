@@ -171,7 +171,7 @@ if __name__ == "__main__":
         for Com, GotTime in shop_list:
             G_H, G_M, G_S = GotTime.split(".")
             G_time = int(G_H)*60*60 + int(G_M)*60 + int(G_S)
-            if abs(G_time-trans_time) <= 30 and abs(trans_time-last_com_time[Com])>36000:
+            if abs(G_time-trans_time) <= 30 and abs(trans_time-last_com_time[Com]) > 36000:
             # print(G_time)
             # print(trans_time)
             # print(last_com_time[Com])

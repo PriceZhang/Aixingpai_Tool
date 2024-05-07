@@ -17,4 +17,3 @@ attrdict
 Pillow>=10.0.0
 pyyaml
 pyautogui
-difflib

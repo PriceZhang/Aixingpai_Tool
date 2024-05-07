@@ -9,3 +9,8 @@
 
 ### 程序更新
 执行update.bat更新程序
+
+### 环境安装
+1. 必要软件：
+    MuMu安卓模拟器、Anaconda、艾兴拍apk安装包
+2. 下载完上述软件后，运行quick_start.bat

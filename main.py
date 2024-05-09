@@ -59,7 +59,7 @@ def BuySellFunction(g_com, g_time, g_point):
         # 2. 如果刚才是委拍，返回我的，查看当前委拍数量，如果委拍数量与之前记录不一样，证明委拍成功
         pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
         pyautogui.click()
-        time.sleep(2)
+        time.sleep(5)
         pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
         pyautogui.click()
         # 截取委拍位置的图像
@@ -67,20 +67,20 @@ def BuySellFunction(g_com, g_time, g_point):
         wei_pai_num_2 = int(result[0][-1][1][0])
         if wei_pai_num_2 != wei_pai_num_1:
             print("委拍成功，当前委拍数为 " + str(wei_pai_num_2))
+            while True:
+                # 2.1 如果委拍成功，不停的点返回，再点我的，直到委拍数量变化
+                pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
+                pyautogui.click()
+                time.sleep(2)
+                pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
+                pyautogui.click()
+                wei_pai_num_3 = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
+                if wei_pai_num_3 != wei_pai_num_2:
+                    print("委拍的物品已拍卖！")
+                    break
         else:
-            print("委拍失败，之前委拍数为 " + str(wei_pai_num_1) + "现在委拍数为 " + str(wei_pai_num_2))
-            return
-        while True:
-            # 2.1 如果委拍成功，不停的点返回，再点我的，直到委拍数量减少
-            pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
-            pyautogui.click()
-            time.sleep(2)
-            pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
-            pyautogui.click()
-            wei_pai_num_3 = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
-            if wei_pai_num_3 != wei_pai_num_2:
-                print("委拍的物品已拍卖！")
-                break
+            print("之前委拍数为 " + str(wei_pai_num_1) + "现在委拍数为 " + str(wei_pai_num_2))
+            print("直接进入参拍")
         # 2.2 委拍完成，进参拍，拍完return
         pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
         pyautogui.click()
@@ -149,8 +149,6 @@ if __name__ == "__main__":
             numbers_str_list = coordinate.split(",")
             coordinate_dict[c_name] = list(map(int, numbers_str_list))
     print(coordinate_dict)
-
-
 
     while True:
     # 提取时、分、秒

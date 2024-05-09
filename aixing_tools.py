@@ -20,7 +20,7 @@ def InferOcrApp(x1=0, y1=0, x2=width, y2=height):
     # width, height = screenshot.size
     if x1 != 0 or y1 != 0:
         app_image = screenshot.crop((x1, y1, x2, y2))
-        cv2.imwrite("app.png", np.array(app_image))
+        # cv2.imwrite("app.png", np.array(app_image))
     else:
         app_image = screenshot
     img_path = np.array(app_image)

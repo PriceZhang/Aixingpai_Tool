@@ -23,7 +23,10 @@ def InferOcrApp(x1=0, y1=0, x2=width, y2=height):
         # cv2.imwrite("app.png", np.array(app_image))
     else:
         app_image = screenshot
+    #numpy
+    print(type(app_image))
     img_path = np.array(app_image)
+    print(type(img_path))
     result = ocr.ocr(img_path, cls=True)
     return result
 

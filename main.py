@@ -74,7 +74,8 @@ def BuySellFunction(g_com, g_time, g_point):
                 time.sleep(2)
                 pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
                 pyautogui.click()
-                wei_pai_num_3 = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
+                result = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
+                wei_pai_num_3 = int(result[0][-1][1][0])
                 if wei_pai_num_3 != wei_pai_num_2:
                     print("委拍的物品已拍卖！")
                     break

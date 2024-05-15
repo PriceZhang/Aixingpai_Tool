@@ -24,9 +24,9 @@ def InferOcrApp(x1=0, y1=0, x2=width, y2=height):
     else:
         app_image = screenshot
     #numpy
-    print(type(app_image))
+    # print(type(app_image))
     img_path = np.array(app_image)
-    print(type(img_path))
+    # print(type(img_path))
     result = ocr.ocr(img_path, cls=True)
     return result
 
@@ -131,15 +131,15 @@ def sell_function(coordinate_dict, g_time):
         return 0
     pyautogui.moveTo(coordinate_dict["委拍2point"][0], coordinate_dict["委拍2point"][1])
     pyautogui.click()
-    time.sleep(2)
-    while True:
-        result = InferOcrApp(coordinate_dict["取消box"][0], coordinate_dict["取消box"][1], coordinate_dict["取消box"][2], coordinate_dict["取消box"][3])
 
+    while True:
+        time.sleep(2)
+        result = InferOcrApp(coordinate_dict["取消box"][0], coordinate_dict["取消box"][1], coordinate_dict["取消box"][2], coordinate_dict["取消box"][3])
+        # print("11111111111" + result)
         if result[0]:
             if result[0][0][1][0] == "取消":
                 pyautogui.moveTo(coordinate_dict["委拍2point"][0], coordinate_dict["委拍2point"][1])
                 pyautogui.click()
-                time.sleep(1)
         else:
             print("委拍完了！！！")
             return 1
@@ -150,7 +150,7 @@ def sell_function(coordinate_dict, g_time):
             minute = now.minute
             second = now.second
             trans_time = hour*60*60 + minute*60 + second
-            if abs(trans_time-g_time) > 300:
+            if abs(trans_time-g_time) > 600:
                 print("委拍超时")
                 return 0
 def buy_function(coordinate_dict, g_time):
@@ -182,7 +182,7 @@ def buy_function(coordinate_dict, g_time):
             minute = now.minute
             second = now.second
             trans_time = hour*60*60 + minute*60 + second
-            if abs(trans_time-g_time) > 300:
+            if abs(trans_time-g_time) > 600:
                 print("参拍超时")
                 return 0
 def set_coordinate():

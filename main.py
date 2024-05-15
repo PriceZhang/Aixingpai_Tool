@@ -59,29 +59,39 @@ def BuySellFunction(g_com, g_time, g_point):
         # 2. 如果刚才是委拍，返回我的，查看当前委拍数量，如果委拍数量与之前记录不一样，证明委拍成功
         pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
         pyautogui.click()
-        time.sleep(5)
-        pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
-        pyautogui.click()
-        # 截取委拍位置的图像
-        result = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
-        wei_pai_num_2 = int(result[0][-1][1][0])
-        if wei_pai_num_2 != wei_pai_num_1:
-            print("委拍成功，当前委拍数为 " + str(wei_pai_num_2))
-            while True:
-                # 2.1 如果委拍成功，不停的点返回，再点我的，直到委拍数量变化
-                pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
-                pyautogui.click()
-                time.sleep(2)
-                pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
-                pyautogui.click()
-                result = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
-                wei_pai_num_3 = int(result[0][-1][1][0])
-                if wei_pai_num_3 != wei_pai_num_2:
-                    print("委拍的物品已拍卖！")
+        time.sleep(2)
+        tmp_count = 0
+        while True:
+            pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
+            pyautogui.click()
+            time.sleep(2)
+            # 截取委拍位置的图像
+            result = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
+            wei_pai_num_2 = int(result[0][-1][1][0])
+            if wei_pai_num_2 != wei_pai_num_1:
+                print("委拍成功，当前委拍数为 " + str(wei_pai_num_2))
+                while True:
+                    # 2.1 如果委拍成功，不停的点返回，再点我的，直到委拍数量变化
+                    pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
+                    pyautogui.click()
+                    time.sleep(2)
+                    pyautogui.moveTo(coordinate_dict["我的point"][0], coordinate_dict["我的point"][1])
+                    pyautogui.click()
+                    time.sleep(2)
+                    result = InferOcrApp(coordinate_dict["委拍数量box"][0], coordinate_dict["委拍数量box"][1], coordinate_dict["委拍数量box"][2], coordinate_dict["委拍数量box"][3])
+                    wei_pai_num_3 = int(result[0][-1][1][0])
+                    print(wei_pai_num_3)
+                    if wei_pai_num_3 != wei_pai_num_2:
+                        print("委拍的物品已拍卖！")
+                        break
+                break
+            else:
+                print("之前委拍数为 " + str(wei_pai_num_1) + "现在委拍数为 " + str(wei_pai_num_2))
+                print(result)
+                tmp_count += 1
+                if tmp_count >= 10:
+                    print("已尝试10次，委拍数未变化，直接进参拍")
                     break
-        else:
-            print("之前委拍数为 " + str(wei_pai_num_1) + "现在委拍数为 " + str(wei_pai_num_2))
-            print("直接进入参拍")
         # 2.2 委拍完成，进参拍，拍完return
         pyautogui.moveTo(coordinate_dict["首页point"][0], coordinate_dict["首页point"][1])
         pyautogui.click()
@@ -161,7 +171,7 @@ if __name__ == "__main__":
         for Com, GotTime in shop_list:
             G_H, G_M, G_S = GotTime.split(".")
             G_time = int(G_H)*60*60 + int(G_M)*60 + int(G_S)
-            if abs(G_time-trans_time) <= 30 and abs(trans_time-last_com_time[Com]) > 36000:
+            if (abs(G_time-trans_time) <= 60) and abs(trans_time-last_com_time[Com]) > 36000:
             # print(G_time)
             # print(trans_time)
             # print(last_com_time[Com])
